@@ -4,7 +4,7 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from posts.models import Comment, Group, Post
+from posts.models import Comment, Follow, Group, Post
 
 
 class Base64ImageField(serializers.ImageField):
@@ -40,3 +40,9 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = Post
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all___'
+        model = Follow
