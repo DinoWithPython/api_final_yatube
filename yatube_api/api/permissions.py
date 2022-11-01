@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """Пермишн разрешающий автору всё, безопасные методы остальным."""
 
