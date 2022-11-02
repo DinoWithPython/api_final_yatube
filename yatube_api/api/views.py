@@ -12,7 +12,7 @@ from .serializers import (CommentSerializer,
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, IsAuthorOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly,)
 
     def get_queryset(self):
         return Comment.objects.filter(post=self.kwargs.get('post_id'))
@@ -30,7 +30,7 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsAuthenticated, IsAuthorOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
@@ -39,6 +39,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
+    permission_classes = (IsAuthenticated, IsAuthorOrReadOnly)
 
     def get_queryset(self):
         return Follow.objects.get(user=self.kwargs.get('user'))
