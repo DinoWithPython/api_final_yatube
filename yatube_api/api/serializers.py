@@ -1,10 +1,11 @@
 import base64
 
 from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from posts.models import Comment, Follow, Group, Post
+from posts.models import Comment, Follow, Group, Post, User
 
 
 class Base64ImageField(serializers.ImageField):
@@ -44,6 +45,28 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
+    user = SlugRelatedField(
+        slug_field='username',
+        read_only=True,
+        default=serializers.CurrentUserDefault())
+    following = SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
+
     class Meta:
-        fields = '__all___'
+        fields = '__all__'
         model = Follow
+
+    def validate(self, data):
+        user = get_object_or_404(User, username=data['following'].username)
+        follow = Follow.objects.filter(
+            user=self.context['request'].user,
+            following=user).exists()
+        if user == self.context['request'].user:
+            raise serializers.ValidationError(
+                "Вы не можете подписаться сам на себя")
+        if follow is True:
+            raise serializers.ValidationError(
+                "Вы уже подписаны на пользователя")
+        return data
