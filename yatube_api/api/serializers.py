@@ -18,13 +18,14 @@ class Base64ImageField(serializers.ImageField):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(
+    author = SlugRelatedField(
         read_only=True, slug_field='username'
     )
 
     class Meta:
         fields = '__all__'
         model = Comment
+        read_only_fields = ('post',)
 
 
 class GroupsSerializer(serializers.ModelSerializer):
