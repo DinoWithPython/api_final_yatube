@@ -3,8 +3,6 @@ from rest_framework import routers
 
 from api.views import CommentViewSet, FollowViewSet, GroupsViewSet, PostViewSet
 
-API_VERSION = 'v1'
-
 router = routers.DefaultRouter()
 router.register('posts', PostViewSet)
 router.register('groups', GroupsViewSet)
@@ -15,6 +13,6 @@ router.register(
 router.register('follow', FollowViewSet, basename='follow')
 
 urlpatterns = [
-    path(f'{API_VERSION}/', include(router.urls)),
-    path(f'{API_VERSION}/', include('djoser.urls.jwt')),
+    path('<str:version>/', include(router.urls)),
+    path('<str:version>/', include('djoser.urls.jwt')),
 ]
